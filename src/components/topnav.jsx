@@ -1,19 +1,18 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 
-
 function TopNav(){
 
     return(
         <div>
-            <Navbar>
+            <Navbar collapseOnSelect fixed="top" expand="sm" bg="dark" variant="dark">
                 <Container>
                     <Navbar.Toggle/>
                     <Navbar.Collapse>
                         <Nav>
-                            <Nav.Link href="/"></Nav.Link>
-                            <Nav.Link href="/resume"></Nav.Link>
-                            <Nav.Link href="/projects"></Nav.Link>
-                            <Nav.Link href="/pindex"></Nav.Link>
+                            <Nav.Link href="/">Home</Nav.Link>
+                            <Nav.Link href="/resume">Resume</Nav.Link>
+                            <Nav.Link href="/projects">Projects</Nav.Link>
+                            <Nav.Link href="/pindex">Pindex</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
