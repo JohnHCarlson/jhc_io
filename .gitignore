@@ -22,3 +22,7 @@ yarn-error.log*
 
 # development
 .vscode
+
+# preview.js
+__previewjs__
+preview.config.js
