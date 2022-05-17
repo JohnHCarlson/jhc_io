@@ -3,7 +3,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 function TopNav(){
 
     return(
-        <div>
+        <header>
             <Navbar collapseOnSelect fixed="top" expand="sm" bg="dark" variant="dark">
                 <Container>
                     <Navbar.Toggle/>
@@ -17,7 +17,7 @@ function TopNav(){
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </div>
+        </header>
     );
 }
 

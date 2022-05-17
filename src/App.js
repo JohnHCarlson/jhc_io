@@ -5,7 +5,8 @@ import Resume from './routes/resume';
 import Projects from './routes/projects';
 import Pindex from './routes/pindex';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
 
 function App() {
   return (
