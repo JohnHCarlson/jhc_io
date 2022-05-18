@@ -1,10 +1,8 @@
-import example_img from '../../public/286x180.png'
+import example_img from '../test/286x180.png'
 import { Card, Button, Collapse, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useState } from 'react';
 
 function PinCard(props) {
-
-    const [open, setOpen] = useState(false);
 
     return (
         <Card style={{width: '18rem'}}>
@@ -26,5 +24,4 @@ function PinCard(props) {
         </Card>
     );
   }
-  
   export default PinCard;
