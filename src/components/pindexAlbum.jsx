@@ -26,7 +26,6 @@ function PindexAlbum(){
     <div className="py-5 bg-light">
         <Container>
             <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              {console.log(pins)}
               {pins.map(item => <PinCard name={item.canorgs} office={item.offices} year={item.election_date}/>)}
             </Row>
         </Container>
