@@ -164,8 +164,8 @@ function PindexModalSubmit(props){
                                         <FormControl className="month-input" value={enteredMonth} onChange={monthChangedHandler} placeholder="Month"></FormControl>
                                     </Col>
                                     <Col>
-                                        <FormLabel>Election Date</FormLabel>
-                                        <FormControl className="date-input" value={enteredDate} onChange={dateChangedHandler} placeholder="Date"></FormControl>
+                                        <FormLabel>Election Day</FormLabel>
+                                        <FormControl className="date-input" value={enteredDate} onChange={dateChangedHandler} placeholder="Day"></FormControl>
                                     </Col>
                                     <Col>
                                         <FormLabel>Election Year</FormLabel>
