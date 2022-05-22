@@ -1,5 +1,8 @@
 import { Container, Form, Modal, Row, Col, Button, InputGroup, FormControl, FormSelect, FormLabel} from "react-bootstrap";
 import { useState } from "react";
+import StateSelection from "./stateSelection";
+import ElectionTypeSelection from "./electionTypeSelection";
+import StanceSelection from "./stanceSelection";
 
 function PindexModalSubmit(props){
 
@@ -93,6 +96,7 @@ function PindexModalSubmit(props){
     }
 
     async function postData(pinData){
+        
         const response = await fetch("http://localhost:8000/pindex/pins/", {
             method: "POST", 
             headers: {
@@ -102,7 +106,7 @@ function PindexModalSubmit(props){
         });
         const data = await response.json();
         console.log(data);
-
+        
     } 
 
 
@@ -134,24 +138,14 @@ function PindexModalSubmit(props){
                                     </Col>
                                 </InputGroup>
                                 <InputGroup className="mb-3">
-
                                     <Col>
-                                        <FormLabel>State</FormLabel>
-                                        <FormSelect className="state-input" value={enteredState} onChange={stateChangedHandler}>
-                                            <option>CT</option>
-                                        </FormSelect>
+                                        <StateSelection value={enteredState} onChange={stateChangedHandler}/>
                                     </Col>
                                     <Col>
-                                        <FormLabel>Election Type</FormLabel>
-                                        <FormSelect className="election-type-input" value={enteredElectionType} onChange={electionTypeChangedHandler}>
-                                            <option >GEN</option>
-                                        </FormSelect>
+                                        <ElectionTypeSelection value={enteredElectionType} onChange={electionTypeChangedHandler}/>
                                     </Col>
                                     <Col>
-                                        <FormLabel>Stance</FormLabel>
-                                        <FormSelect className="stance-input" value={enteredStance} onChange={stanceChangedHandler}>
-                                            <option >PRO</option>
-                                        </FormSelect>
+                                        <StanceSelection value={enteredStance} onChange={stanceChangedHandler}/>
                                     </Col>
                                 </InputGroup>
                                 <InputGroup className="mb-3">
