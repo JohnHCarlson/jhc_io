@@ -123,13 +123,13 @@ function PindexModalSubmit(props){
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            if(data.canorgs){
+            if(data.canorgs && data.canorgs[0].includes("Object with canorg_name=")){
                 handleShowAddCanorg();
             }
-            else if(data.offices){
+            else if(data.offices && data.offices[0].includes("Object with office_name=")){
                 handleShowAddOffice();
             }
-            else if(data.tags){
+            else if(data.tags && data.tags[0].includes("Object with tag_name=")){
                 handleShowAddTag();
             }
         })
