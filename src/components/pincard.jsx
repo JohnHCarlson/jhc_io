@@ -5,11 +5,10 @@ import { useState, useEffect } from 'react';
 function PinCard(props) {
 
     function prepCanorgNames(canorgs){
-
         let canorgNameList = [];
 
         canorgs.map(canorg =>{
-            canorgNameList.push(canorg.canorg_name);
+            canorgNameList.push(canorg);
         })
         return canorgNameList;
     }
@@ -18,7 +17,7 @@ function PinCard(props) {
 
         let officeList = [];
         offices.map(office =>{
-            officeList.push(office.office_name);
+            officeList.push(office);
         })
         return officeList;
     }
