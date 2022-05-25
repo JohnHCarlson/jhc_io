@@ -4,6 +4,9 @@ import StateSelection from "./stateSelection";
 import ElectionTypeSelection from "./electionTypeSelection";
 import StanceSelection from "./stanceSelection";
 import CanorgOfficeSelection from "./canorgOfficeselection";
+import AddCanorgModal from "./addCanorgModal";
+import AddOfficeModal from "./addOfficeModal";
+import AddTagModal from "./addTagModal";
 
 function PindexModalSubmit(props){
 
@@ -18,6 +21,18 @@ function PindexModalSubmit(props){
     const [enteredDate, setDate] = useState("");
     const [enteredYear, setYear] = useState("");
     const [enteredNotes, setNotes] = useState("");
+    
+    const [showAddCanorg, setShowAddCanorg] = useState(false);
+    const handleCloseAddCanorg = () => setShowAddCanorg(false);
+    const handleShowAddCanorg = () => setShowAddCanorg(true);
+
+    const [showAddOffice, setShowAddOffice] = useState(false);
+    const handleCloseAddOffice = () => setShowAddOffice(false);
+    const handleShowAddOffice = () => setShowAddOffice(true);
+
+    const [showAddTag, setShowAddTag] = useState(false);
+    const handleCloseAddTag = () => setShowAddTag(false);
+    const handleShowAddTag = () => setShowAddTag(true);
 
     const canorgsChangedHandler = (event) => {
         setCanorgs(event);
@@ -97,25 +112,35 @@ function PindexModalSubmit(props){
     }
 
     async function postData(pinData){
-        
-        const response = await fetch("http://localhost:8000/pindex/pins/", {
+
+        fetch("http://localhost:8000/pindex/pins/", {
             method: "POST", 
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(pinData),
-        });
-        const data = await response.json();
-        console.log(data);
-        
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if(data.canorgs){
+                handleShowAddCanorg();
+            }
+            else if(data.offices){
+                handleShowAddOffice();
+            }
+            else if(data.tags){
+                handleShowAddTag();
+            }
+        })
+        .catch(console.error);
     } 
-
 
     const submitPin = (event) => {
         event.preventDefault();
 
         const pinData = preparePinData();
-        postData(pinData);
+        const response = postData(pinData);
     }
 
     return(
@@ -176,10 +201,12 @@ function PindexModalSubmit(props){
                                     <Button className="submit-button" variant="primary" type="submit">Submit</Button>
                                     <Button className="clear-button" variant="secondary" type="reset">Clear</Button>
                                 </Col>
-
                             </Row>
                         </Form>
                     </Container>
+                    <AddCanorgModal show={showAddCanorg} onHide={handleCloseAddCanorg}/>
+                    <AddOfficeModal show={showAddOffice} onHide={handleCloseAddOffice}/>
+                    <AddTagModal show={showAddTag} onHide={handleCloseAddTag}/>
                 </Modal.Body>
             </Modal>
         </div>
