@@ -101,7 +101,6 @@ function PindexModalSubmit(props){
     }
 
     const preparePinData = () => {
-        console.log(prepareTags(enteredTags));
         const pinData = {
             canorgs: prepareCanorgs(enteredCanorgs),
             offices: prepareOffices(enteredOffices),
@@ -135,6 +134,7 @@ function PindexModalSubmit(props){
                 handleShowAddOffice();
             }
             else if(data.tags && data.tags[0].includes("Object with tag_name=")){
+                console.log("test");
                 handleShowAddTag();
             }
         })
