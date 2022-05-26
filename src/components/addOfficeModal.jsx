@@ -2,7 +2,7 @@ import { Modal, ModalHeader, ModalTitle, Col, Container, Form, InputGroup, Butto
 import { useState } from "react";
 function AddOfficeModal(props){
 
-    const [enteredOffice, setOffice] = useState("");
+    const [enteredOffice, setOffice] = useState(props.fillValue[0]);
 
     const officeChangedHandler = (event) =>{
         setOffice(event.target.value);

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function AddTagModal(props){
 
-    const [enteredTag, setTag] = useState("");
+    const [enteredTag, setTag] = useState(props.fillValue[0]);
 
     const tagChangedHandler = (event) => {
         setTag(event.target.value);

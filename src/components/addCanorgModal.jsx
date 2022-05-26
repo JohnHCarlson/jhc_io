@@ -5,7 +5,7 @@ import PartySelection from "./partySelection";
 
 function AddCanorgModal(props){
 
-    const [enteredCanorg, setCanorg] = useState("");
+    const [enteredCanorg, setCanorg] = useState(props.fillValue[0]);
     const [enteredState, setState] = useState("");
     const [enteredParty, setParty] = useState("");
 
