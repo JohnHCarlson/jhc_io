@@ -93,10 +93,15 @@ function PindexModalSubmit(props){
     }
 
     const prepareTags = (tags) => {
-        return tags.split(" ");
+
+        if(tags === ""){
+            return [];
+        }
+        return tags.split(',');
     }
 
     const preparePinData = () => {
+        console.log(prepareTags(enteredTags));
         const pinData = {
             canorgs: prepareCanorgs(enteredCanorgs),
             offices: prepareOffices(enteredOffices),
@@ -204,9 +209,9 @@ function PindexModalSubmit(props){
                             </Row>
                         </Form>
                     </Container>
-                    <AddCanorgModal show={showAddCanorg} onHide={handleCloseAddCanorg}/>
-                    <AddOfficeModal show={showAddOffice} onHide={handleCloseAddOffice}/>
-                    <AddTagModal show={showAddTag} onHide={handleCloseAddTag}/>
+                    <AddCanorgModal show={showAddCanorg} onHide={handleCloseAddCanorg} fillValue={enteredCanorgs}/>
+                    <AddOfficeModal show={showAddOffice} onHide={handleCloseAddOffice} fillValue={enteredOffices}/>
+                    <AddTagModal show={showAddTag} onHide={handleCloseAddTag}  fillValue={enteredTags}/>
                 </Modal.Body>
             </Modal>
         </div>
