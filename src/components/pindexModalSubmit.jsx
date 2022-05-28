@@ -1,4 +1,4 @@
-import { Container, Form, Modal, Row, Col, Button, InputGroup, FormControl, FormSelect, FormLabel} from "react-bootstrap";
+import { Container, Form, Modal, Row, Col, Button, InputGroup, FormControl, FormSelect, FormLabel, FormCheck} from "react-bootstrap";
 import { useState } from "react";
 import StateSelection from "./stateSelection";
 import ElectionTypeSelection from "./electionTypeSelection";
@@ -7,6 +7,8 @@ import CanorgOfficeSelection from "./canorgOfficeselection";
 import AddCanorgModal from "./addCanorgModal";
 import AddOfficeModal from "./addOfficeModal";
 import AddTagModal from "./addTagModal";
+import FormCheckInput from "react-bootstrap/esm/FormCheckInput";
+import FormCheckLabel from "react-bootstrap/esm/FormCheckLabel";
 
 function PindexModalSubmit(props){
 
@@ -15,11 +17,15 @@ function PindexModalSubmit(props){
     const [enteredState, setState] = useState("");
     const [enteredElectionType, setElectionType] = useState("");
     const [enteredStance, setStance] = useState("");
-    const [enteredImage, setImage] = useState("");
+    const [enteredQuantity, setQuantity] = useState(0);
     const [enteredTags, setTags] = useState("");
     const [enteredMonth, setMonth] = useState("");
     const [enteredDate, setDate] = useState("");
     const [enteredYear, setYear] = useState("");
+    const [enteredReal, setReal] = useState(false);
+    const [enteredApprox, setApprox] = useState(false);
+    const [enteredNonPolitical, setNonPolitical] = useState(false);
+    const [enteredImage, setImage] = useState();
     const [enteredNotes, setNotes] = useState("");
     
     const [showAddCanorg, setShowAddCanorg] = useState(false);
@@ -54,8 +60,12 @@ function PindexModalSubmit(props){
         setStance(event.target.value);
     }
 
+    const quantityChangedHandler = (event) => {
+        setQuantity(parseInt(event.target.value));
+    }
+
     const imageChangedHandler = (event) => {
-        setImage(event.target.value);
+        setImage(event.target.files[0]);
     }
 
     const tagsChangedHandler = (event) => {
@@ -76,6 +86,18 @@ function PindexModalSubmit(props){
 
     const notesChangedHandler = (event) => {
         setNotes(event.target.value);
+    }
+
+    const realChangedHandler = (event) => {
+        setReal(event.target.checked);
+    }
+
+    const approxChangedHandler = (event) => {
+        setApprox(event.target.checked);
+    }
+    
+    const nonPoliticalChangedHandler = (event) => {
+        setNonPolitical(event.target.checked);
     }
 
     const prepareCanorgs = (canorgs) => {
@@ -101,28 +123,46 @@ function PindexModalSubmit(props){
     }
 
     const preparePinData = () => {
+
+        const pinFormData = new FormData();
+        pinFormData.append('canorgs', prepareCanorgs(enteredCanorgs));
+        pinFormData.append('offices', prepareOffices(enteredOffices));
+        pinFormData.append('pin_state', enteredState);
+        pinFormData.append('election_type', enteredElectionType);
+        pinFormData.append('stance', enteredStance);
+        pinFormData.append('quantity', enteredQuantity);
+        pinFormData.append('image', enteredImage);
+        pinFormData.append('', prepareDate(enteredDate, enteredMonth, enteredYear));
+        pinFormData.append('', enteredReal);
+        pinFormData.append('', enteredApprox);
+        pinFormData.append('', enteredNonPolitical);
+        pinFormData.append('', enteredNotes);
+        pinFormData.append('', prepareTags(enteredTags));
+
+
         const pinData = {
             canorgs: prepareCanorgs(enteredCanorgs),
             offices: prepareOffices(enteredOffices),
             pin_state: enteredState,
             election_type: enteredElectionType,
             stance: enteredStance,
-            //pin_image: enteredImage,
+            quantity: enteredQuantity,
+            image: enteredImage,
             election_date: prepareDate(enteredDate, enteredMonth, enteredYear),
+            real: enteredReal,
+            year_approx: enteredApprox,
+            non_political: enteredNonPolitical,
             notes: enteredNotes,
             tags: prepareTags(enteredTags)
         };
-        return pinData;
+        return pinFormData;
     }
 
     async function postData(pinData){
 
         fetch("http://localhost:8000/pindex/pins/", {
             method: "POST", 
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(pinData),
+            body: pinData,
         })
         .then(response => response.json())
         .then(data => {
@@ -134,7 +174,6 @@ function PindexModalSubmit(props){
                 handleShowAddOffice();
             }
             else if(data.tags && data.tags[0].includes("Object with tag_name=")){
-                console.log("test");
                 handleShowAddTag();
             }
         })
@@ -174,8 +213,8 @@ function PindexModalSubmit(props){
                                 </InputGroup>
                                 <InputGroup className="mb-3">
                                     <Col>
-                                        <FormLabel>Pin Image</FormLabel>
-                                        <FormControl className="image-input"  value={enteredImage} onChange={imageChangedHandler} type="file"></FormControl>
+                                        <FormLabel>Pin Quantity</FormLabel>
+                                        <FormControl className="month-input" value={enteredQuantity} onChange={quantityChangedHandler} placeholder="Pin Quantity"></FormControl>
                                     </Col>
                                     <Col>
                                         <FormLabel>Tags (space delimited)</FormLabel>
@@ -195,6 +234,28 @@ function PindexModalSubmit(props){
                                         <FormLabel>Election Year</FormLabel>
                                         <FormControl className="year-input" value={enteredYear} onChange={yearChangedHandler} placeholder="Year"></FormControl>
                                     </Col>
+                                </InputGroup>
+                                <InputGroup className="mb-3">
+                                        <Col>
+                                            <FormCheck type="checkbox">
+                                                <FormCheckInput type="checkbox" value={enteredReal} onChange={realChangedHandler}/>
+                                                <FormCheckLabel>Real Pin</FormCheckLabel>
+                                            </FormCheck>
+
+                                            <FormCheck type="checkbox">
+                                                <FormCheckInput type="checkbox" value={enteredApprox} onChange={approxChangedHandler}/>
+                                                <FormCheckLabel>Year Approximate</FormCheckLabel>
+                                            </FormCheck>
+
+                                            <FormCheck type="checkbox">
+                                                <FormCheckInput type="checkbox" value={enteredNonPolitical} onChange={nonPoliticalChangedHandler}/>
+                                                <FormCheckLabel>Non Political</FormCheckLabel>
+                                            </FormCheck>
+                                        </Col>
+                                        <Col>
+                                            <FormLabel>Pin Image</FormLabel>
+                                            <FormControl className="image-input" onChange={imageChangedHandler} type="file"></FormControl>
+                                        </Col>
                                 </InputGroup>
                                 <InputGroup className="mb-3">
                                     <Col>
