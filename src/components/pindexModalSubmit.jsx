@@ -28,6 +28,8 @@ function PindexModalSubmit(props){
     const [enteredImage, setImage] = useState();
     const [enteredNotes, setNotes] = useState("");
     
+    const [submittedImageUrl, setSubmittedImageUrl] = useState("");
+
     const [showAddCanorg, setShowAddCanorg] = useState(false);
     const handleCloseAddCanorg = () => setShowAddCanorg(false);
     const handleShowAddCanorg = () => setShowAddCanorg(true);
@@ -122,23 +124,13 @@ function PindexModalSubmit(props){
         return tags.split(',');
     }
 
-    const preparePinData = () => {
+    const prepareImageData = () => {
+        const imageFormData = new FormData();
+        imageFormData.append('pin_image', enteredImage);
+        return imageFormData;
+    }
 
-        const pinFormData = new FormData();
-        pinFormData.append('canorgs', prepareCanorgs(enteredCanorgs));
-        pinFormData.append('offices', prepareOffices(enteredOffices));
-        pinFormData.append('pin_state', enteredState);
-        pinFormData.append('election_type', enteredElectionType);
-        pinFormData.append('stance', enteredStance);
-        pinFormData.append('quantity', enteredQuantity);
-        pinFormData.append('image', enteredImage);
-        pinFormData.append('', prepareDate(enteredDate, enteredMonth, enteredYear));
-        pinFormData.append('', enteredReal);
-        pinFormData.append('', enteredApprox);
-        pinFormData.append('', enteredNonPolitical);
-        pinFormData.append('', enteredNotes);
-        pinFormData.append('', prepareTags(enteredTags));
-
+    const preparePinData = (imageUrl) => {
 
         const pinData = {
             canorgs: prepareCanorgs(enteredCanorgs),
@@ -147,7 +139,7 @@ function PindexModalSubmit(props){
             election_type: enteredElectionType,
             stance: enteredStance,
             quantity: enteredQuantity,
-            image: enteredImage,
+            image: imageUrl,
             election_date: prepareDate(enteredDate, enteredMonth, enteredYear),
             real: enteredReal,
             year_approx: enteredApprox,
@@ -155,36 +147,48 @@ function PindexModalSubmit(props){
             notes: enteredNotes,
             tags: prepareTags(enteredTags)
         };
-        return pinFormData;
+
+        return pinData;
     }
 
-    async function postData(pinData){
+    async function postData(imageData){
 
-        fetch("http://localhost:8000/pindex/pins/", {
+        var pinImageUrl = "";
+
+        fetch("http://localhost:8000/pindex/pin_image/", {
             method: "POST", 
-            body: pinData,
+            body: imageData,
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            if(data.canorgs && data.canorgs[0].includes("Object with canorg_name=")){
-                handleShowAddCanorg();
-            }
-            else if(data.offices && data.offices[0].includes("Object with office_name=")){
-                handleShowAddOffice();
-            }
-            else if(data.tags && data.tags[0].includes("Object with tag_name=")){
-                handleShowAddTag();
+            if(data.id){
+                pinImageUrl = data.id;
             }
         })
-        .catch(console.error);
-    } 
+        .then(() => {
+
+            const pinData = preparePinData(pinImageUrl);
+            return fetch("http://localhost:8000/pindex/pins/", {
+                method: "POST", 
+                headers: {
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify(pinData),
+                
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+        })
+    }
 
     const submitPin = (event) => {
         event.preventDefault();
 
+        const imageData = prepareImageData();
         const pinData = preparePinData();
-        const response = postData(pinData);
+
+        postData(imageData, pinData);
     }
 
     return(
